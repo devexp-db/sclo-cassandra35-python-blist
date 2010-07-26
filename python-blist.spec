@@ -9,6 +9,7 @@ Group:          Development/Languages
 License:        BSD
 URL:            http://pypi.python.org/pypi/blist/
 Source0:        http://pypi.python.org/packages/source/b/blist/blist-%{version}.tar.gz
+Patch0:		blist-1.2.1-use-sys-setuptools.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel python-setuptools
@@ -24,6 +25,7 @@ inefficient if you need to create a larger number of small lists.
 
 %prep
 %setup -q -n blist-%{version}
+%patch0 -p1 -b .use-sys-setuptools
 
 # Replace the not-zip-safe file; keep rpmlint happy by not having
 # CRLF line endings
