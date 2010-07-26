@@ -2,7 +2,7 @@
 
 Name:           python-blist
 Version:        1.2.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A faster list implementation for Python
 
 Group:          Development/Languages
@@ -60,6 +60,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jul 26 2010 David Malcolm <dmalcolm@redhat.com> - 1.2.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
 * Mon Jul 26 2010 Michel Salim <salimma@fedoraproject.org> - 1.2.1-1
 - Update to 1.2.1
 
