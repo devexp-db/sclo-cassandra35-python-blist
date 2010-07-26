@@ -1,7 +1,7 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           python-blist
-Version:        1.1.1
+Version:        1.2.1
 Release:        1%{?dist}
 Summary:        A faster list implementation for Python
 
@@ -9,7 +9,6 @@ Group:          Development/Languages
 License:        BSD
 URL:            http://pypi.python.org/pypi/blist/
 Source0:        http://pypi.python.org/packages/source/b/blist/blist-%{version}.tar.gz
-Patch0:         blist-1.1.1-use-sys-setuptools.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel python-setuptools
@@ -25,7 +24,6 @@ inefficient if you need to create a larger number of small lists.
 
 %prep
 %setup -q -n blist-%{version}
-%patch0 -p1 -b .use-sys-setuptools
 
 # Replace the not-zip-safe file; keep rpmlint happy by not having
 # CRLF line endings
@@ -57,11 +55,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE README.rst blist.rst
+%doc LICENSE README.rst
 %{python_sitearch}/*
 
 
 %changelog
+* Mon Jul 26 2010 Michel Salim <salimma@fedoraproject.org> - 1.2.1-1
+- Update to 1.2.1
+
 * Fri May 21 2010 Michel Salim <salimma@fedoraproject.org> - 1.1.1-1
 - Update to 1.1.1
 
