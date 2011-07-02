@@ -1,8 +1,8 @@
 %{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib(1)")}
 
 Name:           python-blist
-Version:        1.2.1
-Release:        3%{?dist}
+Version:        1.3.4
+Release:        1%{?dist}
 Summary:        A faster list implementation for Python
 
 Group:          Development/Languages
@@ -62,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jul  2 2011 Michel Salim <salimma@fedoraproject.org> - 1.3.4-1
+- Update to 1.3.4
+
 * Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
