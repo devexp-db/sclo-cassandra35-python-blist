@@ -18,13 +18,15 @@ Group:          Development/Languages
 License:        BSD
 URL:            http://pypi.python.org/pypi/blist/
 Source0:        http://pypi.python.org/packages/source/b/blist/blist-%{version}.tar.gz
-#Patch0:                blist-1.2.1-use-sys-setuptools.patch
+# EL7 has setuptools 0.9.8, not 1.1.6
+# override the version specified in ez_setup.py
+Patch0:         blist-1.3.6-el7_098.patch
 
 BuildRequires:  python2-devel
 BuildRequires:  python-setuptools
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
-BuildRequires:	python3-setuptools
+BuildRequires:  python3-setuptools
 %endif # if with_python3
 
 %description
@@ -64,7 +66,9 @@ identical performance.
 
 %prep
 %setup -q -n %{srcname}-%{version}
-#patch0 -p1 -b .use-sys-setuptools
+%if 0%{?el7}
+%patch0 -p1 -b .el7_098
+%endif
 
 # Replace the not-zip-safe file; keep rpmlint happy by not having
 # CRLF line endings
