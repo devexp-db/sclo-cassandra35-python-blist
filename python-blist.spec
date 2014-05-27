@@ -11,7 +11,7 @@
 
 Name:           python-%{srcname}
 Version:        1.3.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A faster list implementation for Python
 
 Group:          Development/Languages
@@ -134,6 +134,9 @@ popd
 
 
 %changelog
+* Tue May 27 2014 Kalev Lember <kalevlember@gmail.com> - 1.3.6-2
+- Rebuilt for https://fedoraproject.org/wiki/Changes/Python_3.4
+
 * Thu May  8 2014 Michel Salim <salimma@fedoraproject.org> - 1.3.6-1
 - Update to 1.3.6
 - Build for Python 3 as well on supported releases
