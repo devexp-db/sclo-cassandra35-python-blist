@@ -11,7 +11,7 @@
 
 Name:           python-%{srcname}
 Version:        1.3.6
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        A faster list implementation for Python
 
 Group:          Development/Languages
@@ -29,20 +29,28 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 %endif # if with_python3
 
-%description
-The blist is a drop-in replacement for the Python list that provides
-better performance when modifying large lists. The blist package also
-provides sortedlist, sortedset, weaksortedlist, weaksortedset,
-sorteddict, and btuple types.
-
-Python's built-in list is a dynamically-sized array; to insert or
-remove an item from the beginning or middle of the list, it has to
-move most of the list in memory, i.e., O(n) operations. The blist uses
-a flexible, hybrid array/tree structure and only needs to move a small
-portion of items in memory, specifically using O(log n) operations.
-
-For small lists, the blist and the built-in list have virtually
+%global _description\
+The blist is a drop-in replacement for the Python list that provides\
+better performance when modifying large lists. The blist package also\
+provides sortedlist, sortedset, weaksortedlist, weaksortedset,\
+sorteddict, and btuple types.\
+\
+Python's built-in list is a dynamically-sized array; to insert or\
+remove an item from the beginning or middle of the list, it has to\
+move most of the list in memory, i.e., O(n) operations. The blist uses\
+a flexible, hybrid array/tree structure and only needs to move a small\
+portion of items in memory, specifically using O(log n) operations.\
+\
+For small lists, the blist and the built-in list have virtually\
 identical performance.
+
+%description %_description
+
+%package -n python2-%{srcname}
+Summary: %summary
+%{?python_provide:%python_provide python2-%{srcname}}
+
+%description -n python2-%{srcname} %_description
 
 %if 0%{?with_python3}
 %package -n python3-%{srcname}
@@ -121,7 +129,7 @@ popd
 %endif # with_python3
 
 
-%files
+%files -n python2-%{srcname}
 %defattr(-,root,root,-)
 %doc LICENSE README.rst
 %{python2_sitearch}/*
@@ -134,6 +142,10 @@ popd
 
 
 %changelog
+* Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.3.6-13
+- Python 2 binary package renamed to python2-blist
+  See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.6-12
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
