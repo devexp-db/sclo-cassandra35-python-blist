@@ -1,3 +1,6 @@
+%{?scl:%scl_package python-blist}
+%{!?scl:%global pkg_name %{name}}
+
 %if 0%{?rhel} && 0%{?rhel} <= 6
 %{!?__python2: %global __python2 /usr/bin/python2}
 %{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
@@ -9,9 +12,9 @@
 
 %global srcname blist
 
-Name:           python-%{srcname}
+Name:           %{?scl_prefix}python-%{srcname}
 Version:        1.3.6
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        A faster list implementation for Python
 
 Group:          Development/Languages
@@ -28,6 +31,8 @@ BuildRequires:  python-setuptools
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 %endif # if with_python3
+%{?scl:Requires: %scl_runtime}
+%{?scl:BuildRequires: %scl-scldevel}
 
 %global _description\
 The blist is a drop-in replacement for the Python list that provides\
@@ -46,17 +51,17 @@ identical performance.
 
 %description %_description
 
-%package -n python2-%{srcname}
+%package -n %{?scl_prefix}python2-%{srcname}
 Summary: %summary
-%{?python_provide:%python_provide python2-%{srcname}}
+%{!?scl:%{?python_provide:%python_provide python2-%{srcname}}}
 
-%description -n python2-%{srcname} %_description
+%description -n %{?scl_prefix}python2-%{srcname} %_description
 
 %if 0%{?with_python3}
-%package -n python3-%{srcname}
+%package -n %{?scl_prefix}python3-%{srcname}
 Summary:        A faster list implementation for Python
 
-%description -n python3-%{srcname}
+%description -n %{?scl_prefix}python3-%{srcname}
 The blist is a drop-in replacement for the Python list that provides
 better performance when modifying large lists. The blist package also
 provides sortedlist, sortedset, weaksortedlist, weaksortedset,
@@ -97,6 +102,7 @@ find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
 find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python2}|'
 
 %build
+%{?scl:scl enable %{scl} - << "EOF"}
 CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" %{__python2} setup.py build
 
 %if 0%{?with_python3}
@@ -104,19 +110,22 @@ pushd %{py3dir}
 CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing" %{__python3} setup.py build
 popd
 %endif # with_python3
+%{?scl:EOF}
 
 %install
 rm -rf $RPM_BUILD_ROOT
 # Must do the python3 install first because the scripts in /usr/bin are
 # overwritten with every setup.py install (and we want the python2 version
 # to be the default for now).
+%{?scl:scl enable %{scl} - << "EOF"}
 %if 0%{?with_python3}
 pushd %{py3dir}
-%{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
+%{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT --prefix %{?_prefix}
 popd
 %endif # with_python3
 
-%{__python2} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%{__python2} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT --prefix %{?_prefix}
+%{?scl:EOF}
 
  
 %check
@@ -129,19 +138,22 @@ popd
 %endif # with_python3
 
 
-%files -n python2-%{srcname}
+%files -n %{?scl_prefix}python2-%{srcname}
 %defattr(-,root,root,-)
 %doc LICENSE README.rst
 %{python2_sitearch}/*
 
 %if 0%{?with_python3}
-%files -n python3-%{srcname}
+%files -n %{?scl_prefix}python3-%{srcname}
 %doc LICENSE README.rst
 %{python3_sitearch}/*
 %endif # with_python3
 
 
 %changelog
+* Mon Oct 02 2017 Augusto Mecking Caringi <acaringi@redhat.com> - 1.3.6-14
+- scl conversion
+
 * Sat Aug 19 2017 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.3.6-13
 - Python 2 binary package renamed to python2-blist
   See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3
